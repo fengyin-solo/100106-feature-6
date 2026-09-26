@@ -4,6 +4,7 @@
 """
 from __future__ import annotations
 
+import copy
 from typing import Any
 
 from app.seed import SEED_ROWS
@@ -11,8 +12,9 @@ from app.seed import SEED_ROWS
 
 class Store:
     def __init__(self) -> None:
+        # 深拷贝：记录里的问题清单、操作日志是嵌套结构，浅拷贝会把运行时修改带回种子数据。
         self._tables: dict[str, list[dict[str, Any]]] = {
-            name: [dict(row) for row in rows] for name, rows in SEED_ROWS.items()
+            name: [copy.deepcopy(row) for row in rows] for name, rows in SEED_ROWS.items()
         }
 
     def module_names(self) -> list[str]:
